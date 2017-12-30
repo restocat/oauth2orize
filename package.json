@@ -1,35 +1,28 @@
 {
-  "name": "oauth2orize",
-  "version": "1.11.0",
-  "description": "OAuth 2.0 authorization server toolkit for Node.js.",
+  "name": "restocat-oauth2",
+  "version": "1.0.0",
+  "description": "OAuth 2.0 authorization server toolkit for Restocat.",
   "keywords": [
     "oauth",
     "oauth2",
     "auth",
     "authz",
     "authorization",
-    "connect",
-    "express",
-    "passport",
-    "middleware"
+    "restocat",
+    "restocat-plugin",
+    "oauth2orize",
+    "passport"
   ],
   "author": {
-    "name": "Jared Hanson",
-    "email": "jaredhanson@gmail.com",
-    "url": "http://www.jaredhanson.net/"
+    "name": "Maksim Chetverikov",
+    "email": "ma.chetverikov@gmail.com"
   },
-  "contributors": [
-    {
-      "name": "Samuel Judson",
-      "url": "https://www.sjudson.com/"
-    }
-  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/jaredhanson/oauth2orize.git"
+    "url": "git://github.com/restocat/restocat-oauth2.git"
   },
   "bugs": {
-    "url": "http://github.com/jaredhanson/oauth2orize/issues"
+    "url": "http://github.com/restocat/restocat-oauth2/issues"
   },
   "license": "MIT",
   "licenses": [
