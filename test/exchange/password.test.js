@@ -18,7 +18,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -53,7 +53,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         if (client.id !== 'c223') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -88,7 +88,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         if (client.id !== 'c523') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -123,7 +123,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         if (client.id !== 'c323') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -158,7 +158,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         if (client.id !== 'c423') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -190,7 +190,7 @@ describe('exchange.password', function() {
   });
   
   describe('issuing an access token based on scope', function() {
-    function issue(client, username, passwd, scope, done) {
+    function issue({client, username, passwd, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (username !== 'bob') { return done(new Error('incorrect username argument')); }
       if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -227,7 +227,7 @@ describe('exchange.password', function() {
   });
   
   describe('issuing an access token based on array of scopes', function() {
-    function issue(client, username, passwd, scope, done) {
+    function issue({client, username, passwd, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (username !== 'bob') { return done(new Error('incorrect username argument')); }
       if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -265,7 +265,7 @@ describe('exchange.password', function() {
   });
   
   describe('issuing an access token based on scope and body', function() {
-    function issue(client, username, passwd, scope, body, done) {
+    function issue({client, username, passwd, scope, body}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (username !== 'bob') { return done(new Error('incorrect username argument')); }
       if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -303,7 +303,7 @@ describe('exchange.password', function() {
   });
   
   describe('issuing an access token based on authInfo', function() {
-    function issue(client, username, passwd, scope, body, authInfo, done) {
+    function issue({client, username, passwd, scope, body, authInfo}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (username !== 'bob') { return done(new Error('incorrect username argument')); }
       if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -346,7 +346,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         return done(null, false)
       }
       
@@ -375,7 +375,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         return done(null, '.ignore')
       }
       
@@ -404,7 +404,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         return done(null, '.ignore')
       }
       
@@ -433,7 +433,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         return done(new Error('something is wrong'));
       }
       
@@ -459,7 +459,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         throw new Error('something was thrown')
       }
       
@@ -485,7 +485,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         return done(new Error('something is wrong'));
       }
       
@@ -510,7 +510,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function (done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         return done(new Error('something is wrong'));
       }
 
@@ -537,7 +537,7 @@ describe('exchange.password', function() {
 
   describe('with scope separator option', function() {
     describe('issuing an access token based on array of scopes', function() {
-      function issue(client, username, passwd, scope, done) {
+      function issue({client, username, passwd, scope}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -576,7 +576,7 @@ describe('exchange.password', function() {
   });
   
   describe('with multiple scope separator option', function() {
-    function issue(client, username, passwd, scope, done) {
+    function issue({client, username, passwd, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (username !== 'bob') { return done(new Error('incorrect username argument')); }
       if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }
@@ -646,7 +646,7 @@ describe('exchange.password', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, username, passwd, done) {
+      function issue({client, username, passwd}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         if (username !== 'bob') { return done(new Error('incorrect username argument')); }
         if (passwd !== 'shh') { return done(new Error('incorrect passwd argument')); }

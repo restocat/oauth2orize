@@ -18,7 +18,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         if (code !== 'abc123') { return done(new Error('incorrect code argument')); }
         if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -53,7 +53,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         if (client.id !== 'c223') { return done(new Error('incorrect client argument')); }
         if (code !== 'abc223') { return done(new Error('incorrect code argument')); }
         if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -88,7 +88,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         if (client.id !== 'c523') { return done(new Error('incorrect client argument')); }
         if (code !== 'abc523') { return done(new Error('incorrect code argument')); }
         if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -123,7 +123,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         if (client.id !== 'c323') { return done(new Error('incorrect client argument')); }
         if (code !== 'abc323') { return done(new Error('incorrect code argument')); }
         if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -158,7 +158,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         if (client.id !== 'c423') { return done(new Error('incorrect client argument')); }
         if (code !== 'abc423') { return done(new Error('incorrect code argument')); }
         if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -192,7 +192,7 @@ describe('exchange.authorizationCode', function() {
   describe('issuing an access token based on body', function() {
     var response, err;
     
-    function issue(client, code, redirectURI, body, done) {
+    function issue({client, code, redirectURI, body}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (code !== 'abc123') { return done(new Error('incorrect code argument')); }
       if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -228,7 +228,7 @@ describe('exchange.authorizationCode', function() {
   describe('issuing an access token based on authInfo', function() {
     var response, err;
     
-    function issue(client, code, redirectURI, body, authInfo, done) {
+    function issue({client, code, redirectURI, body, authInfo}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (code !== 'abc123') { return done(new Error('incorrect code argument')); }
       if (redirectURI !== 'http://example.com/oa/callback') { return done(new Error('incorrect redirectURI argument')); }
@@ -267,7 +267,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         return done(null, false)
       }
       
@@ -296,7 +296,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         return done(null, '.ignore')
       }
       
@@ -325,7 +325,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         return done(new Error('something is wrong'));
       }
       
@@ -351,7 +351,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         throw new Error('something was thrown')
       }
       
@@ -377,7 +377,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         return done(null, '.ignore')
       }
       
@@ -402,7 +402,7 @@ describe('exchange.authorizationCode', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, code, redirectURI, done) {
+      function issue({client, code, redirectURI}, done) {
         return done(null, 's3cr1t');
       }
       

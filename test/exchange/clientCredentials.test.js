@@ -18,7 +18,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         
         return done(null, 's3cr1t')
@@ -51,7 +51,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         if (client.id !== 'c223') { return done(new Error('incorrect client argument')); }
         
         return done(null, 's3cr1t', 'getANotehr')
@@ -84,7 +84,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         if (client.id !== 'c523') { return done(new Error('incorrect client argument')); }
         
         return done(null, 's3cr1t', { 'expires_in': 3600 })
@@ -117,7 +117,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         if (client.id !== 'c323') { return done(new Error('incorrect client argument')); }
         
         return done(null, 's3cr1t', null, { 'expires_in': 3600 })
@@ -150,7 +150,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         if (client.id !== 'c423') { return done(new Error('incorrect client argument')); }
         
         return done(null, 's3cr1t', 'blahblag', { 'token_type': 'foo', 'expires_in': 3600 })
@@ -180,7 +180,7 @@ describe('exchange.clientCredentials', function() {
   });
   
   describe('issuing an access token based on scope', function() {
-    function issue(client, scope, done) {
+    function issue({client, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (scope.length !== 1) { return done(new Error('incorrect scope argument')); }
       if (scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
@@ -215,7 +215,7 @@ describe('exchange.clientCredentials', function() {
   });
   
   describe('issuing an access token based on array of scopes', function() {
-    function issue(client, scope, done) {
+    function issue({client, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (scope.length !== 2) { return done(new Error('incorrect scope argument')); }
       if (scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
@@ -251,7 +251,7 @@ describe('exchange.clientCredentials', function() {
   });
   
   describe('issuing an access token based on scope and body', function() {
-    function issue(client, scope, body, done) {
+    function issue({client, scope, body}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (scope.length !== 1) { return done(new Error('incorrect scope argument')); }
       if (scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
@@ -290,7 +290,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, scope, body, authInfo, done) {
+      function issue({client, scope, body, authInfo}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         if (scope.length !== 1) { return done(new Error('incorrect scope argument')); }
         if (scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
@@ -328,7 +328,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         return done(null, false)
       }
       
@@ -357,7 +357,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         return done(new Error('something is wrong'));
       }
       
@@ -383,7 +383,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         throw new Error('something was thrown')
       }
       
@@ -409,7 +409,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         return done(null, '.ignore')
       }
       
@@ -434,7 +434,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function (done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         return done(null, '.ignore')
       }
 
@@ -460,7 +460,7 @@ describe('exchange.clientCredentials', function() {
   });  
   
   describe('with scope separator option', function() {
-    function issue(client, scope, done) {
+    function issue({client, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (scope.length !== 2) { return done(new Error('incorrect scope argument')); }
       if (scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
@@ -498,7 +498,7 @@ describe('exchange.clientCredentials', function() {
   });
   
   describe('with multiple scope separator option', function() {
-    function issue(client, scope, done) {
+    function issue({client, scope}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (scope.length !== 2) { return done(new Error('incorrect scope argument')); }
       if (scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
@@ -566,7 +566,7 @@ describe('exchange.clientCredentials', function() {
     var response, err;
 
     before(function(done) {
-      function issue(client, done) {
+      function issue({client}, done) {
         if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
         
         return done(null, 's3cr1t')
