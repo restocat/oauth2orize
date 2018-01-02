@@ -42,7 +42,7 @@ describe('resume', function() {
     });
     
     before(function() {
-      immediate = function(client, user, done) {
+      immediate = function({client, user}, done) {
         if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
         if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
         
@@ -54,7 +54,7 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -120,7 +120,7 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, done) {
+        immediate = function({client, user, scope}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -183,7 +183,7 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, done) {
+        immediate = function({client, user, scope, type}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -247,13 +247,13 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, done) {
+        immediate = function({client, user, scope, type, req}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
-          
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
+
           return done(null, true, { scope: 'profile email' });
         };
       });
@@ -279,17 +279,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -297,28 +297,28 @@ describe('resume', function() {
         expect(request.oauth2.info).to.be.undefined;
         expect(request.oauth2.locals).to.be.undefined;
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
     });
-    
+
     describe('based on client, user, scope, and type, and authorization request, that supplies locals', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, done) {
+        immediate = function({client, user, scope, type, req}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
-          
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
+
           return done(null, true, { scope: 'profile email' }, { service: { name: 'Contacts' } });
         };
       });
@@ -344,17 +344,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -364,29 +364,29 @@ describe('resume', function() {
         expect(Object.keys(request.oauth2.locals)).to.have.length(1);
         expect(request.oauth2.locals.service.name).to.equal('Contacts');
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
     });
-    
+
     describe('based on client, user, scope, and type, authorization request, and locals', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, locals, done) {
+        immediate = function({client, user, scope, type, req, locals}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
           if (locals !== undefined) { return done(new Error('incorrect locals argument')) };
-          
+
           return done(null, true, { scope: 'profile email' });
         };
       });
@@ -412,17 +412,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -430,29 +430,29 @@ describe('resume', function() {
         expect(request.oauth2.info).to.be.undefined;
         expect(request.oauth2.locals).to.be.undefined;
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
     });
-    
+
     describe('based on client, user, scope, and type, authorization request, and response locals', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, locals, done) {
+        immediate = function({client, user, scope, type, req, locals}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
           if (locals.grant.id !== 'g123') { return done(new Error('incorrect locals argument')) };
-          
+
           return done(null, true, { scope: 'profile email' });
         };
       });
@@ -481,17 +481,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -501,30 +501,30 @@ describe('resume', function() {
         expect(Object.keys(request.oauth2.locals)).to.have.length(1);
         expect(request.oauth2.locals.grant.id).to.equal('g123');
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
     });
-    
+
     describe('based on client, user, scope, and type, authorization request, and response and transaction locals', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, locals, done) {
+        immediate = function({client, user, scope, type, req, locals}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
           if (locals.grant.id !== 'g123') { return done(new Error('incorrect locals argument')) };
           if (locals.service.name !== 'Contacts') { return done(new Error('incorrect locals argument')) };
-          
+
           return done(null, true, { scope: 'profile email' });
         };
       });
@@ -554,17 +554,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -575,29 +575,29 @@ describe('resume', function() {
         expect(request.oauth2.locals.grant.id).to.equal('g123');
         expect(request.oauth2.locals.service.name).to.equal('Contacts');
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
     });
-    
+
     describe('based on client, user, scope, and type, authorization request, and transaction locals', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, locals, done) {
+        immediate = function({client, user, scope, type, req, locals}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
           if (locals.service.name !== 'Contacts') { return done(new Error('incorrect locals argument')) };
-          
+
           return done(null, true, { scope: 'profile email' });
         };
       });
@@ -624,17 +624,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -644,29 +644,29 @@ describe('resume', function() {
         expect(Object.keys(request.oauth2.locals)).to.have.length(1);
         expect(request.oauth2.locals.service.name).to.equal('Contacts');
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
     });
-    
+
     describe('based on client, user, scope, and type, authorization request, and transaction locals, that supplies additional locals', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, scope, type, areq, locals, done) {
+        immediate = function({client, user, scope, type, req, locals}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (areq.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
+          if (req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
           if (locals.service.name !== 'Contacts') { return done(new Error('incorrect locals argument')) };
-          
+
           return done(null, true, { scope: 'profile email' }, { ip: '127.0.0.1' });
         };
       });
@@ -693,17 +693,17 @@ describe('resume', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-      
+
       it('should set user on transaction', function() {
         expect(request.oauth2.user).to.be.an('object');
         expect(request.oauth2.user.id).to.equal('u123');
         expect(request.oauth2.user.username).to.equal('bob');
       });
-    
+
       it('should set response on transaction', function() {
         expect(request.oauth2.res).to.be.an('object');
         expect(request.oauth2.res.allow).to.be.true;
@@ -714,12 +714,12 @@ describe('resume', function() {
         expect(request.oauth2.locals.service.name).to.equal('Contacts');
         expect(request.oauth2.locals.ip).to.equal('127.0.0.1');
       });
-    
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-      
+
       it('should remove transaction from session', function() {
         expect(request.session['authorize']['abc123']).to.be.undefined;
       });
@@ -729,12 +729,12 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(txn, done) {
+        immediate = function({txn}, done) {
           if (txn.client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (txn.user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           if (txn.req.scope !== 'email') { return done(new Error('incorrect scope argument')); }
           if (txn.req.type !== 'code') { return done(new Error('incorrect type argument')); }
-          if (txn.req.audience !== 'https://api.example.com/') { return done(new Error('incorrect areq argument')); }
+          if (txn.req.audience !== 'https://api.example.com/') { return done(new Error('incorrect req argument')); }
           if (txn.locals.service.name !== 'Contacts') { return done(new Error('incorrect locals argument')) };
           
           return done(null, true, { scope: 'profile email' }, { ip: '127.0.0.1' });
@@ -799,7 +799,7 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           return done(new Error('something went wrong while checking immediate status'));
         };
       });
@@ -855,7 +855,7 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           throw new Error('something was thrown while checking immediate status');
         };
       });
@@ -1056,7 +1056,7 @@ describe('resume', function() {
       var immediate, complete, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -1139,7 +1139,7 @@ describe('resume', function() {
       var immediate, complete, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -1205,7 +1205,7 @@ describe('resume', function() {
       var immediate, complete, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -1292,7 +1292,7 @@ describe('resume', function() {
     });
     
     before(function() {
-      immediate = function(client, user, done) {
+      immediate = function({client, user}, done) {
         if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
         if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
         
@@ -1304,7 +1304,7 @@ describe('resume', function() {
       var immediate, request, response, err;
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -1381,7 +1381,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, done) {
+          immediate = function({client, user}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -1440,7 +1440,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, done) {
+          immediate = function({client, user}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -1500,7 +1500,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, scope, done) {
+          immediate = function({client, user, scope}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
             if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -1564,7 +1564,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, scope, done) {
+          immediate = function({client, user, scope}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
             if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -1629,7 +1629,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, scope, done) {
+          immediate = function({client, user, scope}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
             if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -1696,7 +1696,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, scope, done) {
+          immediate = function({client, user, scope}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
             if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -1774,7 +1774,7 @@ describe('resume', function() {
         var immediate, request, err;
 
         before(function() {
-          immediate = function(client, user, scope, done) {
+          immediate = function({client, user, scope}, done) {
             if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
             if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
             if (scope !== 'email') { return done(new Error('incorrect scope argument')); }
@@ -1840,13 +1840,13 @@ describe('resume', function() {
 
       before(function() {
         server = new Server();
-        server.serializeClient(function(client, done) {
+        server.serializeClient(function({client}, done) {
           return done(new Error('something went wrong while serializing client'));
         });
       });
 
       before(function() {
-        immediate = function(client, user, done) {
+        immediate = function({client, user}, done) {
           if (client.id !== '1234') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
         
