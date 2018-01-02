@@ -323,7 +323,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -357,7 +357,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -392,7 +392,7 @@ describe('grant.token', function() {
       var response, completed;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -434,7 +434,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c223') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -468,7 +468,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c323') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -502,7 +502,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -536,7 +536,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
           
@@ -571,7 +571,7 @@ describe('grant.token', function() {
       var err;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           return done(null, false);
         }
         
@@ -605,7 +605,7 @@ describe('grant.token', function() {
       var err;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           return done(new Error('something is wrong'));
         }
         
@@ -636,7 +636,7 @@ describe('grant.token', function() {
       var err;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           throw new Error('something was thrown');
         }
         
@@ -667,7 +667,7 @@ describe('grant.token', function() {
       var err;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           return done(null, 'xyz');
         }
         
@@ -700,7 +700,7 @@ describe('grant.token', function() {
       var err;
       
       before(function(done) {
-        function issue(client, user, done) {
+        function issue({client, user}, done) {
           return done(null, 'xyz');
         }
         
@@ -729,10 +729,10 @@ describe('grant.token', function() {
   });
   
   describe('decision handling with user response', function() {
-    function issue(client, user, ares, done) {
+    function issue({client, user, res}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
-      if (ares.scope !== 'foo') { return done(new Error('incorrect ares argument')); }
+      if (res.scope !== 'foo') { return done(new Error('incorrect res argument')); }
       
       return done(null, 'xyz');
     }
@@ -766,11 +766,11 @@ describe('grant.token', function() {
   });
 
   describe('decision handling with user response and client request', function() {
-    function issue(client, user, ares, areq, done) {
+    function issue({client, user, res, req}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
-      if (ares.scope !== 'foo') { return done(new Error('incorrect ares argument')); }
-      if (areq.state !== 'f1o1o1') { return done(new Error('incorrect areq argument')); }
+      if (res.scope !== 'foo') { return done(new Error('incorrect res argument')); }
+      if (req.state !== 'f1o1o1') { return done(new Error('incorrect areq argument')); }
       
       return done(null, 'xyz');
     }
@@ -805,11 +805,11 @@ describe('grant.token', function() {
   });
   
   describe('decision handling with user response, client request, and server locals', function() {
-    function issue(client, user, ares, areq, locals, done) {
+    function issue({client, user, res, req, locals}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
-      if (ares.scope !== 'foo') { return done(new Error('incorrect ares argument')); }
-      if (areq.state !== 'f1o1o1') { return done(new Error('incorrect areq argument')); }
+      if (res.scope !== 'foo') { return done(new Error('incorrect res argument')); }
+      if (req.state !== 'f1o1o1') { return done(new Error('incorrect req argument')); }
       if (locals.service.jwksURL !== 'http://www.example.com/.well-known/jwks') { return done(new Error('incorrect locals argument')); }
       
       return done(null, 'xyz');
@@ -846,7 +846,7 @@ describe('grant.token', function() {
   });
   
   describe('decision handling with response mode', function() {
-    function issue(client, user, done) {
+    function issue({client, user}, done) {
       return done(null, 'xyz');
     }
     
@@ -994,7 +994,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(token(issue))
@@ -1030,7 +1030,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(token(issue))
@@ -1066,7 +1066,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(token(issue))
@@ -1102,7 +1102,7 @@ describe('grant.token', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(token(issue))
@@ -1139,7 +1139,7 @@ describe('grant.token', function() {
       var response, err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(token(issue))
@@ -1167,7 +1167,7 @@ describe('grant.token', function() {
   });
   
   describe('error handling with response mode', function() {
-    function issue(client, redirectURI, user, done) {
+    function issue({client, redirectURI, user}, done) {
     }
     
     var fooResponseMode = function(txn, res, params) {

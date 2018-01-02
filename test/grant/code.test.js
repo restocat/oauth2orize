@@ -323,7 +323,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
@@ -358,7 +358,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
@@ -394,7 +394,7 @@ describe('grant.code', function() {
       var response, completed;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
@@ -437,7 +437,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
@@ -472,7 +472,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
@@ -508,7 +508,7 @@ describe('grant.code', function() {
       var err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           return done(null, false);
         }
         
@@ -542,7 +542,7 @@ describe('grant.code', function() {
       var err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           return done(new Error('something went wrong'));
         }
         
@@ -573,7 +573,7 @@ describe('grant.code', function() {
       var err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           throw new Error('something was thrown');
         }
         
@@ -604,7 +604,7 @@ describe('grant.code', function() {
       var err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           return done(null, 'xyz');
         }
         
@@ -637,7 +637,7 @@ describe('grant.code', function() {
       var err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
           return done(null, 'xyz');
         }
         
@@ -666,11 +666,11 @@ describe('grant.code', function() {
   });
   
   describe('decision handling with user response', function() {
-    function issue(client, redirectURI, user, ares, done) {
+    function issue({client, redirectURI, user, res}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
       if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
-      if (ares.scope !== 'foo') { return done(new Error('incorrect ares argument')); }
+      if (res.scope !== 'foo') { return done(new Error('incorrect res argument')); }
       
       return done(null, 'xyz');
     }
@@ -704,12 +704,12 @@ describe('grant.code', function() {
   });
   
   describe('decision handling with user response and client request', function() {
-    function issue(client, redirectURI, user, ares, areq, done) {
+    function issue({client, redirectURI, user, res, req}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
       if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
-      if (ares.scope !== 'foo') { return done(new Error('incorrect ares argument')); }
-      if (areq.codeChallenge !== 'hashed-s3cr1t') { return done(new Error('incorrect areq argument')); }
+      if (res.scope !== 'foo') { return done(new Error('incorrect res argument')); }
+      if (req.codeChallenge !== 'hashed-s3cr1t') { return done(new Error('incorrect req argument')); }
       
       return done(null, 'xyz');
     }
@@ -744,12 +744,12 @@ describe('grant.code', function() {
   });
   
   describe('decision handling with user response, client request, and server locals', function() {
-    function issue(client, redirectURI, user, ares, areq, locals, done) {
+    function issue({client, redirectURI, user, res, req, locals}, done) {
       if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
       if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
       if (user.id !== 'u123') { return done(new Error('incorrect user argument')); }
-      if (ares.scope !== 'foo') { return done(new Error('incorrect ares argument')); }
-      if (areq.codeChallenge !== 'hashed-s3cr1t') { return done(new Error('incorrect areq argument')); }
+      if (res.scope !== 'foo') { return done(new Error('incorrect res argument')); }
+      if (req.codeChallenge !== 'hashed-s3cr1t') { return done(new Error('incorrect req argument')); }
       if (locals.service.jwksURL !== 'http://www.example.com/.well-known/jwks') { return done(new Error('incorrect locals argument')); }
       
       return done(null, 'xyz');
@@ -786,7 +786,7 @@ describe('grant.code', function() {
   });
   
   describe('decision handling with response mode', function() {
-    function issue(client, redirectURI, user, done) {
+    function issue({client, redirectURI, user}, done) {
       return done(null, 'xyz');
     }
     
@@ -933,7 +933,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(code(issue))
@@ -969,7 +969,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(code(issue))
@@ -1005,7 +1005,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(code(issue))
@@ -1041,7 +1041,7 @@ describe('grant.code', function() {
       var response;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(code(issue))
@@ -1078,7 +1078,7 @@ describe('grant.code', function() {
       var response, err;
       
       before(function(done) {
-        function issue(client, redirectURI, user, done) {
+        function issue({client, redirectURI, user}, done) {
         }
         
         chai.oauth2orize.grant(code(issue))
@@ -1106,7 +1106,7 @@ describe('grant.code', function() {
   });
   
   describe('error handling with response mode', function() {
-    function issue(client, redirectURI, user, done) {
+    function issue({client, redirectURI, user}, done) {
     }
     
     var fooResponseMode = function(txn, res, params) {
