@@ -56,7 +56,7 @@ describe('authorization', function() {
     });
     
     before(function() {
-      validate = function(clientID, redirectURI, done) {};
+      validate = function({clientID, redirectURI}, done) {};
     });
     
     
@@ -227,7 +227,7 @@ describe('authorization', function() {
       var request, err;
 
       before(function(done) {
-        function validate(clientID, redirectURI, done) {
+        function validate({clientID, redirectURI}, done) {
           return done(null, false);
         };
       
@@ -267,7 +267,7 @@ describe('authorization', function() {
       var request, err;
 
       before(function(done) {
-        function validate(clientID, redirectURI, done) {
+        function validate({clientID, redirectURI}, done) {
           return done(null, false, 'http://example.com/auth/callback');
         };
       
@@ -302,7 +302,7 @@ describe('authorization', function() {
       var request, err;
 
       before(function(done) {
-        function validate(clientID, redirectURI, done) {
+        function validate({clientID, redirectURI}, done) {
           return done(new Error('something went wrong while validating client'));
         };
       
@@ -335,7 +335,7 @@ describe('authorization', function() {
       var request, err;
 
       before(function(done) {
-        function validate(clientID, redirectURI, done) {
+        function validate({clientID, redirectURI}, done) {
           throw new Error('something was thrown while validating client');
         };
       
@@ -384,7 +384,7 @@ describe('authorization', function() {
     });
     
     before(function() {
-      validate = function(clientID, redirectURI, done) {
+      validate = function({clientID, redirectURI}, done) {
         if (clientID !== '1234') { return done(new Error('incorrect client argument')); }
         if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
 
@@ -442,7 +442,7 @@ describe('authorization', function() {
       var validate, request, err;
       
       before(function() {
-        validate = function(clientID, redirectURI, scope, done) {
+        validate = function({clientID, redirectURI, scope}, done) {
           if (clientID !== '1234') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (scope !== 'write') { return done(new Error('incorrect scope argument')); }
@@ -500,7 +500,7 @@ describe('authorization', function() {
       var validate, request, err;
       
       before(function() {
-        validate = function(clientID, redirectURI, scope, type, done) {
+        validate = function({clientID, redirectURI, scope, type}, done) {
           if (clientID !== '1234') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
           if (scope !== 'write') { return done(new Error('incorrect scope argument')); }
@@ -559,9 +559,9 @@ describe('authorization', function() {
       var validate, request, err;
       
       before(function() {
-        validate = function(areq, done) {
-          if (areq.clientID !== '1234') { return done(new Error('incorrect client argument')); }
-          if (areq.redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
+        validate = function({req}, done) {
+          if (req.clientID !== '1234') { return done(new Error('incorrect client argument')); }
+          if (req.redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
       
           return done(null, { id: '1234', name: 'Example' }, 'http://example.com/auth/callback');
         };
@@ -614,7 +614,7 @@ describe('authorization', function() {
       var request, err;
 
       before(function() {
-        validate = function(clientID, redirectURI, done) {
+        validate = function({clientID, redirectURI}, done) {
           if (clientID !== '1234') { return done(new Error('incorrect client argument')); }
           if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
 
@@ -869,7 +869,7 @@ describe('authorization', function() {
     });
     
     before(function() {
-      validate = function(clientID, redirectURI, done) {
+      validate = function({clientID, redirectURI}, done) {
         if (clientID !== '1234') { return done(new Error('incorrect client argument')); }
         if (redirectURI !== 'http://example.com/auth/callback') { return done(new Error('incorrect redirectURI argument')); }
 
