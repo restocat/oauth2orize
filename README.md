@@ -1,19 +1,19 @@
-# OAuth2orize
+# Restocat OAuth2
 
 [![Build](https://img.shields.io/travis/jaredhanson/oauth2orize.svg)](https://travis-ci.org/jaredhanson/oauth2orize)
 [![Coverage](https://img.shields.io/coveralls/jaredhanson/oauth2orize.svg)](https://coveralls.io/r/jaredhanson/oauth2orize)
 [![Quality](https://img.shields.io/codeclimate/github/jaredhanson/oauth2orize.svg?label=quality)](https://codeclimate.com/github/jaredhanson/oauth2orize)
 [![Dependencies](https://img.shields.io/david/jaredhanson/oauth2orize.svg)](https://david-dm.org/jaredhanson/oauth2orize)
 
-OAuth2orize is an authorization server toolkit for Node.js.  It provides a suite
-of middleware that, combined with [Passport](http://passportjs.org/)
+Restocat OAuth2 is an authorization server toolkit for Restocat based on [oauth2orize](https://github.com/jaredhanson/oauth2orize
+).  It provides a suite of middleware that, combined with [Passport](http://passportjs.org/)
 authentication strategies and application-specific route handlers, can be used
 to assemble a server that implements the [OAuth 2.0](http://tools.ietf.org/html/rfc6749)
 protocol.
 
 ## Install
 
-    $ npm install oauth2orize
+    $ npm install restocat-oauth2
 
 ## Usage
 
@@ -28,7 +28,7 @@ Call `createServer()` to create a new OAuth 2.0 server.  This instance exposes
 middleware that will be mounted in routes, as well as configuration options.
 
 ```javascript
-var server = oauth2orize.createServer();
+const server = oauth2.createServer();
 ```
 
 #### Register Grants
@@ -36,19 +36,20 @@ var server = oauth2orize.createServer();
 A client must obtain permission from a user before it is issued an access token.
 This permission is known as a grant, the most common type of which is an
 authorization code.
+
 ```javascript
-server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
+server.grant(oauth2.grant.code(({client, redirectURI, user, res}, done) => {
   var code = utils.uid(16);
 
-  var ac = new AuthorizationCode(code, client.id, redirectURI, user.id, ares.scope);
-  ac.save(function(err) {
+  var ac = new AuthorizationCode(code, client.id, redirectURI, user.id, res.scope);
+  ac.save((err) => {
     if (err) { return done(err); }
     return done(null, code);
   });
 }));
 ```
 
-OAuth2orize also bundles support for implicit token grants.
+Restocat OAuth2 also bundles support for implicit token grants.
 
 #### Register Exchanges
 
@@ -56,15 +57,15 @@ After a client has obtained an authorization grant from the user, that grant can
 be exchanged for an access token.
 
 ```javascript
-server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, done) {
-  AuthorizationCode.findOne(code, function(err, code) {
+server.exchange(oauth2.exchange.code(({client, code, redirectURI}, done) => {
+  AuthorizationCode.findOne(code, (err, code) => {
     if (err) { return done(err); }
     if (client.id !== code.clientId) { return done(null, false); }
     if (redirectURI !== code.redirectUri) { return done(null, false); }
 
-    var token = utils.uid(256);
-    var at = new AccessToken(token, code.userId, code.clientId, code.scope);
-    at.save(function(err) {
+    const token = utils.uid(256);
+    const at = new AccessToken(token, code.userId, code.clientId, code.scope);
+    at.save((err) => {
       if (err) { return done(err); }
       return done(null, token);
     });
@@ -72,7 +73,7 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, do
 }));
 ```
 
-OAuth2orize also bundles support for password and client credential grants.
+Restocat OAuth2 also bundles support for password and client credential grants.
 Additionally, bundled refresh token support allows expired access tokens to be
 renewed.
 
@@ -85,11 +86,12 @@ their permission.
 ```javascript
 app.get('/dialog/authorize',
   login.ensureLoggedIn(),
-  server.authorize(function(clientID, redirectURI, done) {
-    Clients.findOne(clientID, function(err, client) {
+  server.authorize(({clientID, redirectURI}, done) => {
+    Clients.findOne(clientID, (err, client) => {
       if (err) { return done(err); }
       if (!client) { return done(null, false); }
       if (client.redirectUri != redirectURI) { return done(null, false); }
+
       return done(null, client, client.redirectURI);
     });
   }),
@@ -123,11 +125,11 @@ will typically be as simple as serializing the client ID, and finding the client
 by ID when deserializing.
 
 ```javascript
-server.serializeClient(function(client, done) {
+server.serializeClient((client, done) => {
   return done(null, client.id);
 });
 
-server.deserializeClient(function(id, done) {
+server.deserializeClient((id, done) => {
   Clients.findOne(id, function(err, client) {
     if (err) { return done(err); }
     return done(null, client);
@@ -164,9 +166,7 @@ on behalf of the user.
 ```javascript
 app.get('/api/userinfo', 
   passport.authenticate('bearer', { session: false }),
-  function(req, res) {
-    res.json(req.user);
-  });
+  (req, res) => res.json(req.user));
 ```
 
 In this example, bearer tokens are issued, which are then authenticated using
@@ -185,7 +185,7 @@ how to implement an OAuth service provider, complete with protected API access.
 
 ## Debugging
 
-oauth2orize uses the [debug module](https://www.npmjs.org/package/debug).  You can enable debugging messages on the console by doing ```export DEBUG=oauth2orize``` before running your application.
+restocat oauth2 uses the [debug module](https://www.npmjs.org/package/debug).  You can enable debugging messages on the console by doing ```export DEBUG=oauth2orize``` before running your application.
 
 ## Contributing
 
@@ -210,23 +210,8 @@ $ make test-cov
 $ make view-cov
 ```
 
-## Support
-
-#### Funding
-
-This software is provided to you as open source, free of charge.  The time and
-effort to develop and maintain this project is dedicated by [@jaredhanson](https://github.com/jaredhanson).
-If you (or your employer) benefit from this project, please consider a financial
-contribution.  Your contribution helps continue the efforts that produce this
-and other open source software.
-
-Funds are accepted via [PayPal](https://paypal.me/jaredhanson), [Venmo](https://venmo.com/jaredhanson),
-and [other](http://jaredhanson.net/pay) methods.  Any amount is appreciated.
-
 ## License
 
 [The MIT License](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2012-2017 Jared Hanson <[http://jaredhanson.net/](http://jaredhanson.net/)>
-
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/vK9dyjRnnWsMzzJTQ57fRJpH/jaredhanson/oauth2orize'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/vK9dyjRnnWsMzzJTQ57fRJpH/jaredhanson/oauth2orize.svg' /></a>
+Copyright (c) 2017 Maksim Chetverikov <[https://github.com/chetverikov](https://github.com/chetverikov)>
